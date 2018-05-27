@@ -36,7 +36,7 @@ MOVEMENT_SENSOR_CHR_PERIOD = uuid.UUID('f000aa83-0451-4000-b000-000000000000')
 
 
 provider = Adafruit_BluefruitLE.get_provider()
-ahrs = gam.MadgwickAHRS(0.1)
+ahrs = gam.MadgwickAHRS(0.1, 0.075574973)
 
 def main():
     #    provider.clear_cached_data()
@@ -110,12 +110,12 @@ def main():
         # Notification callback
         #
         def on_notified(data):
-            [gx, gy, gz, ax, ay, az, mx, my, mz] = gam.raw2axises(data)
+            [gx, gy, gz, ax, ay, az, mx, my, mz] = gam.raw2nineaxis(data)
             ahrs.update(gam.deg2rad(gx), gam.deg2rad(gy),
                         gam.deg2rad(gz), ax, ay, az, mx, my, mz)
-            [x, y, z] = gam.quaternion2euler(ahrs.quaternion)
+            roll, pitch, yaw = gam.quaternion2euler(ahrs.quaternion)
             print '%10.5f %10.5f %10.5f' % (
-                math.degrees(x), math.degrees(y), math.degrees(z))
+                math.degrees(roll), math.degrees(pitch), math.degrees(yaw))
 
         print 'Subsribing notification...'
         c_data = service.find_characteristic(MOVEMENT_SENSOR_CHR_DATA)

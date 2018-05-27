@@ -1,14 +1,25 @@
-import math
+import numpy as np
+
 
 def quaternion2euler(q):
-    q_0 = q[0]
-    q_1 = q[1]
-    q_2 = q[2]
-    q_3 = q[3]
+    qw = q[0]
+    qx = q[1]
+    qy = q[2]
+    qz = q[3]
 
-    x = math.atan2(2*(q_0*q_1+q_2*q_3), (1-2*(q_1*q_1+q_2*q_2)))
-    y = math.asin(2*(q_0*q_2-q_3*q_1))
-    z = math.atan2(2*(q_0*q_3+q_1*q_2), (1-2*(q_2*q_2+q_3*q_3)))
+    qy2 = qy ** 2
 
-    return [x, y, z]
-    
+    sinr = 2.0 * (qw * qx + qy * qz)
+    cosr = 1.0 - 2.0 * (qx ** 2 + qy2)
+    roll = np.arctan2(sinr, cosr)
+
+    sinp = 2.0 * (qw * qy - qz * qx)
+    sinp = 1.0 if sinp > 1.0 else sinp
+    sinp = -1.0 if sinp < -1.0 else sinp
+    pitch = np.arcsin(sinp)
+
+    siny = 2.0 * (qw * qz + qx * qy)
+    cosy = 1.0 - 2.0 * (qy2 + qz ** 2)
+    yaw = np.arctan2(siny, cosy)
+
+    return roll, pitch, yaw

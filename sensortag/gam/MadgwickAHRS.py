@@ -1,12 +1,12 @@
 ﻿# coding:utf-8
 # derived from http://x-io.co.uk/open-source-imu-and-ahrs-algorithms/
 
-import math
+import numpy as np
 
-"""
-MadgwickAHRS class. Implementation of Madgwick's IMU and AHRS algorithms.
-See: http://www.x-io.co.uk/node/8#open_source_ahrs_and_imu_algorithms
-"""
+#
+# MadgwickAHRS class. Implementation of Madgwick's IMU and AHRS algorithms.
+# See: http://www.x-io.co.uk/node/8#open_source_ahrs_and_imu_algorithms
+#
 
 
 class MadgwickAHRS(object):
@@ -17,9 +17,9 @@ class MadgwickAHRS(object):
     beta = 0.0
 
     # Gets or sets the Quaternion output.
-    quaternion = [0.0, 0.0, 0.0, 1.0]
+    quaternion = [1.0, 0.0, 0.0, 0.0]
 
-    # Initializes a new instance of the <see cref="MadgwickAHRS"/> class.
+    # Initializes a new instance of the MadgwickAHRS class.
     def __init__(self, samplePeriod, beta=1.0):
         self.samplePeriod = samplePeriod
         self.beta = beta
@@ -53,7 +53,7 @@ class MadgwickAHRS(object):
         q4q4 = q4 * q4
 
         # Normalise accelerometer measurement
-        norm = math.sqrt(ax * ax + ay * ay + az * az)
+        norm = np.sqrt(ax * ax + ay * ay + az * az)
         if (norm == 0):
             return  # handle NaN
         norm = 1 / norm  # use reciprocal for division
@@ -62,7 +62,7 @@ class MadgwickAHRS(object):
         az *= norm
 
         # Normalise magnetometer measurement
-        norm = math.sqrt(mx * mx + my * my + mz * mz)
+        norm = np.sqrt(mx * mx + my * my + mz * mz)
         if (norm == 0):
             return  # handle NaN
         norm = 1 / norm  # use reciprocal for division
@@ -79,7 +79,7 @@ class MadgwickAHRS(object):
             _2q2 * my * q3 + _2q2 * mz * q4 - mx * q3q3 - mx * q4q4
         hy = _2q1mx * q4 + my * q1q1 - _2q1mz * q2 + _2q2mx * \
             q3 - my * q2q2 + my * q3q3 + _2q3 * mz * q4 - my * q4q4
-        _2bx = math.sqrt(hx * hx + hy * hy)
+        _2bx = np.sqrt(hx * hx + hy * hy)
         _2bz = -_2q1mx * q3 + _2q1my * q2 + mz * q1q1 + _2q2mx * \
             q4 - mz * q2q2 + _2q3 * my * q4 - mz * q3q3 + mz * q4q4
         _4bx = 2.0 * _2bx
@@ -97,7 +97,7 @@ class MadgwickAHRS(object):
             (-_2bx * q1 + _2bz * q3) * (_2bx * (q2q3 - q1q4) + _2bz * (q1q2 + q3q4) -
                                         my) + _2bx * q2 * (_2bx * (q1q3 + q2q4) + _2bz * (0.5 - q2q2 - q3q3) - mz)
         # normalise step magnitude
-        norm = 1.0 / math.sqrt(s1 * s1 + s2 * s2 + s3 * s3 + s4 * s4)
+        norm = 1.0 / np.sqrt(s1 * s1 + s2 * s2 + s3 * s3 + s4 * s4)
         s1 *= norm
         s2 *= norm
         s3 *= norm
@@ -114,7 +114,7 @@ class MadgwickAHRS(object):
         q2 += qDot2 * self.samplePeriod
         q3 += qDot3 * self.samplePeriod
         q4 += qDot4 * self.samplePeriod
-        norm = 1.0 / math.sqrt(q1 * q1 + q2 * q2 + q3 *
+        norm = 1.0 / np.sqrt(q1 * q1 + q2 * q2 + q3 *
                                q3 + q4 * q4)    # normalise quaternion
         self.quaternion[0] = q1 * norm
         self.quaternion[1] = q2 * norm

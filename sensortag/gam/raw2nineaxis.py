@@ -3,7 +3,7 @@ import struct
 GYRO_SCALE = 65536.0/500.0
 ACC_SCALE = 32768.0/8.0 # ACC RANGE 8G
 
-def raw2axises(data):
+def raw2nineaxis(data):
     gam = struct.unpack('<hhhhhhhhh', data)
 
     # GYRO
