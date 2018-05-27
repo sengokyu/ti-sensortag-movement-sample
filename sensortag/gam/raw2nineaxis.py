@@ -1,10 +1,10 @@
-import struct
+from struct import unpack
 
 GYRO_SCALE = 65536.0/500.0
 ACC_SCALE = 32768.0/8.0 # ACC RANGE 8G
 
 def raw2nineaxis(data):
-    gam = struct.unpack('<hhhhhhhhh', data)
+    gam = unpack('<hhhhhhhhh', data)
 
     # GYRO
     gx = gam[0] / GYRO_SCALE

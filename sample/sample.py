@@ -30,9 +30,6 @@ MOVEMENT_SENSOR_CHR_DATA = uuid.UUID('f000aa81-0451-4000-b000-000000000000')
 MOVEMENT_SENSOR_CHR_CONFIG = uuid.UUID('f000aa82-0451-4000-b000-000000000000')
 #  Resolution 10 ms. Range 100 ms (0x0A) to 2.55 sec (0xFF). Default 1 second (0x64).
 MOVEMENT_SENSOR_CHR_PERIOD = uuid.UUID('f000aa83-0451-4000-b000-000000000000')
-# Write 0x0001 to enable notifications, 0x0000 to disable.
-# CLIENT_CHARACTERISTIC_CONFIG = uuid.UUID(
-#    '00002902-0000-1000-8000-00805f9b34fb')
 
 
 provider = Adafruit_BluefruitLE.get_provider()
